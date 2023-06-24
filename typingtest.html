@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Race Against Time</title>
+	<style>
+		/* Background color */
+body {
+  background-color: #f6d743;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1a1a1a;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Header */
+h1 {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+  text-shadow: 0 0 10px #ffc800;
+}
+
+/* Paragraphs */
+p {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* Quote */
+#quote {
+  font-size: 36px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color: #fff;
+  text-shadow: 0 0 10px #ffc800;
+  animation: slide-in 1s ease-in-out forwards;
+}
+
+/* Input */
+textarea {
+  width: 100%;
+  height: 150px;
+  font-size: 20px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #ffc800;
+  border-radius: 5px;
+  resize: none;
+  color: #1a1a1a;
+  background-color: #fff;
+}
+
+/* Result */
+#result {
+  font-size: 48px;
+  text-align: center;
+  margin-top: 30px;
+  color: #fff;
+  text-shadow: 0 0 10px #ffc800;
+}
+
+/* Button */
+button {
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-shadow: none;
+  transition: all 0.9s ease-in-out;
+}
+
+button:hover {
+  background-color: #ffc800;
+  color: #1a1a1a;
+  transform: translateY(-1px);
+  transition: all 0.9s ease-in-out;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Animation */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Race against Time</h1>
+		<p>This is a simple typing speed test. Select a mode and start typing the given text. Your typing speed and accuracy will be calculated automatically.</p>
+		<p>Select a mode:</p>
+		<button onclick="setMode('easy')">Easy</button>
+		<button onclick="setMode('hard')">Hard</button>
+		<p id="quote"></p>
+		<textarea id="input" placeholder="Start typing here..." oninput="calculateSpeed()"></textarea>
+		<p id="result"></p>
+	</div>
+	<script>
+		var startTime;
+		var quote;
+		
+		function setMode(mode) {
+  var easyQuotes = [
+    "Scolding is something common in student life. Being a naughty boy, I am always scolded by my parents. But one day I was severely scolded by my English teacher. She infect teaches well. But that day, I could not resist the temptation that an adventure of Nancy Drew offered. While she was teaching, I was completely engrossed in reading that book. Nancy Drew was caught in the trap laid by some smugglers and it was then when I felt a light tap on my bent head. The teacher had caught me red handed. She scolded me then and there and insulted me in front of the whole class. I was embarrassed. My cheeks burned being guilty conscious. When the class was over, I went to the teacher to apologize.",
+    "Days are not of equal value in one’s life. Some bring happiness while others bring sadness. Sadness and happiness both are equally important to man’s life, since they are the two sides of a coin. As we cannot forget the happiest day, we are unable to forget the saddest day of our life too. The saddest day of my life was the Diwali Day. Diwali is considered to be a happy festival and till last Diwali, it was my favorite festival. On last Diwali, my sister, my brother and I were busy lighting the fireworks. I was holding a ‘fuljhari’ in my hand and unfortunately my younger brother, who was standing just beside me, had a cracker in his hand. This cracker caught fire and a very loud explosion was heard which shook my sister and me. After that, we all could think of nothing else than blood stained cotton, bandage, dettol etc.",
+    "Studying is the main source of knowledge. Books are indeed never failing friends of man. For a mature mind, reading is the greatest source of pleasure and solace to distressed minds. The study of good books ennobles us and broadens our outlook. Therefore, the habit of reading should be cultivated. A student should never confine himself to his schoolbooks only. He should not miss the pleasure locked in the classics, poetry, drama, history, philosophy etc. We can derive benefit from other’s experiences with the help of books.",
+  ];
+
+  var hardQuotes = [
+    "A rib injury to regular skipper du Plessis meant that RCB had to make use of the Impact sub rule to use him purely as a batter in their last two matches, with Kohli captaining the side. Meanwhile, the Chennai Super Kings skipper himself suffered an injury in the early part of the tournament and missed a few matches before returning to lead the team again",
+    "A Delhi court on Friday dismissed the bail application of AAP leader Manish Sisodia in a money laundering case related to the alleged excise policy scam.Special Judge M K Nagpal denied the relief to Sisodia, saying the stage was not fit to grant him bail.The judge had reserved the order after hearing arguments on Sisodia's plea seeking relief claiming that his custody was no longer required for investigation.",
+    "What carnage from LSG. Absolute belter of a pitch. Lost the toss and asked to bat and PBKS played this into LSG's hands with some poor bowling. Mayers teed off with 4 boundaries off Arshdeep's first over. KG Rabada got KL cheaply. KL will be kicking himself for missing out on easy runs on this pitch. Mayers flew to a 20-ball fifty before KG got him. Badoni at No.3 wasted no time and Stoinis at 4 worked wonders as he looked so comfortable from the outset. Dhawan had nowhere to hide his emotions.",
+  ];
+
+  var quotes;
+  if (mode == "easy") {
+    quotes = easyQuotes;
+  } else if (mode == "hard") {
+    quotes = hardQuotes;
+  }
+
+  var index = Math.floor(Math.random() * quotes.length);
+  quote = quotes[index];
+  document.getElementById("quote").innerHTML = quote;
+  document.getElementById("input").value = "";
+  document.getElementById("result").innerHTML = "";
+}
+		
+		document.getElementById("input").addEventListener("focus", function() {
+			startTime = Date.now();
+		});
+
+		function calculateSpeed() {
+			var input = document.getElementById("input").value;
+			var words = quote.split(" ");
+			var inputWords = input.split(" ");
+			var errors = 0;
+			for (var i = 0; i < words.length; i++) {
+				if (words[i] != inputWords[i]) {
+					errors++;
+				}
+            }
+			
+  
+  var accuracy = ((words.length - errors) / words.length) * 100;
+  var timeElapsed = (Date.now() - startTime) / 1000;
+  var speed = Math.round((input.length / 5) / (timeElapsed / 60));
+  var result = "Your typing speed is " + speed + " WPM with " + accuracy.toFixed(2) + "% accuracy.";
+  document.getElementById("result").innerHTML = result;
+}
+    </script>
+</body>
+</html>
+			
